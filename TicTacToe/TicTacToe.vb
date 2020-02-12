@@ -32,17 +32,17 @@ Public Class frmTicTacToe
     ''' <summary>
     ''' When a button is clicked, assign it a letter, disable the button, and if there was no winner change the turn
     ''' </summary>
-    Private Sub TicTacToeSquareClick(txtSender As Button, e As EventArgs) Handles btnRow0Column0.Click, btnRow0Column1.Click, btnRow0Column2.Click, btnRow1Column0.Click, btnRow1Column1.Click, btnRow1Column2.Click, btnRow2Column0.Click, btnRow2Column1.Click, btnRow2Column2.Click
+    Private Sub TicTacToeSquareClick(btnSender As Button, e As EventArgs) Handles btnRow0Column0.Click, btnRow0Column1.Click, btnRow0Column2.Click, btnRow1Column0.Click, btnRow1Column1.Click, btnRow1Column2.Click, btnRow2Column0.Click, btnRow2Column1.Click, btnRow2Column2.Click
 
         ' Set the text on the Button
         If isTurnX Then
-            txtSender.Text = "X"
+            btnSender.Text = "X"
         Else
-            txtSender.Text = "O"
+            btnSender.Text = "O"
         End If
 
         ' Disable the button
-        txtSender.Enabled = False
+        btnSender.Enabled = False
 
         ' Evaluate win
         EvaluateWin()
