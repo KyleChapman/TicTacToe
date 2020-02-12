@@ -163,6 +163,10 @@ Public Class frmTicTacToe
             isWinner = True
         End If
 
+        ' *************************************************
+        ' Here are some notes about extra stuff you can try
+        ' *************************************************
+
         ' You don't have to do any of these things but here are several added value features:
 
         ' 1) If you want to get a little bit fancy...
