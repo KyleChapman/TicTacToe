@@ -1,5 +1,5 @@
 ﻿' Last Modified By:   
-' Last Modified Date: 
+' Last Modified Date: February 11, 2020
 '
 ' Author: Kyle Chapman
 ' Date: February 9, 2020
@@ -53,9 +53,6 @@ Public Class frmTicTacToe
             ChangeTurn()
         End If
 
-        ' Evaluate tie
-        EvaluateTie()
-
         ' Put focus on the Reset button
         btnReset.Focus()
 
@@ -102,21 +99,6 @@ Public Class frmTicTacToe
     End Sub
 
     ''' <summary>
-    ''' This colors all controls in the array that is passed in
-    ''' </summary>
-    ''' <param name="controlArray">An array of controls to enable or disable</param>
-    ''' <param name="setColor">A colour to set all controls</param>
-    Sub SetControlsColor(controlArray As Control(,), setColor As Color)
-
-        ' For every textbox in the list that is passed in, set its Enabled property
-        For Each controlToSet As Button In controlArray
-            controlToSet.BackColor = setColor
-        Next
-
-    End Sub
-
-
-    ''' <summary>
     ''' Clears things and re-enables controls
     ''' </summary>
     Sub SetDefaults()
@@ -125,8 +107,6 @@ Public Class frmTicTacToe
         ClearControls(squares)
         ' Re-enable any controls that may be disabled
         SetControlsEnabled(squares, True)
-        ' Set controls to a default color
-        SetControlsColor(squares, Color.LightGray)
         ' Ensure there's no winner
         isWinner = False
         ' ChangeTurn resets the status label and gives the loser the first turn
@@ -163,34 +143,12 @@ Public Class frmTicTacToe
         ' have the same value - doesn't even matter what the value is
         ' as long as it's the same!
         For rowCount As Integer = 0 To squares.GetUpperBound(0)
+            ' What does "GetUpperBound(0)" mean above?
 
-            If squares(rowCount, 0).Text <> String.Empty And squares(rowCount, 0).Text = squares(rowCount, 1).Text And squares(rowCount, 0).Text = squares(rowCount, 2).Text Then
-                isWinner = True
-
-                squares(rowCount, 0).BackColor = Color.Azure
-                squares(rowCount, 1).BackColor = Color.Azure
-                squares(rowCount, 2).BackColor = Color.Azure
-
-            End If
-
+            ' Something to do with squares(rowCount,0), squares(rowCount,1), etc.
         Next
 
         ' Next, check all columns.
-        ' Use a For loop to check if all boxes in the same dimension
-        ' have the same value - doesn't even matter what the value is
-        ' as long as it's the same!
-        For columnCount As Integer = 0 To squares.GetUpperBound(1)
-
-            If squares(0, columnCount).Text <> String.Empty And squares(0, columnCount).Text = squares(1, columnCount).Text And squares(0, columnCount).Text = squares(2, columnCount).Text Then
-                isWinner = True
-
-                squares(0, columnCount).BackColor = Color.Azure
-                squares(1, columnCount).BackColor = Color.Azure
-                squares(2, columnCount).BackColor = Color.Azure
-
-            End If
-
-        Next
 
         ' Finally, we have to check the two diagonals.
         ' It is not going to save us any work to use loops
@@ -199,26 +157,32 @@ Public Class frmTicTacToe
             squares(0, 0).Text = squares(1, 1).Text And
             squares(0, 0).Text = squares(2, 2).Text Then
             isWinner = True
-
-            squares(0, 0).BackColor = Color.Azure
-            squares(1, 1).BackColor = Color.Azure
-            squares(2, 2).BackColor = Color.Azure
-
         ElseIf squares(0, 2).Text <> String.Empty And
             squares(0, 2).Text = squares(1, 1).Text And
             squares(0, 2).Text = squares(2, 0).Text Then
             isWinner = True
-
-            squares(0, 2).BackColor = Color.Azure
-            squares(1, 1).BackColor = Color.Azure
-            squares(2, 0).BackColor = Color.Azure
         End If
 
-        ' If you want to get fancy...
-        ' make the winning line show up in a different colour!
+        ' You don't have to do any of these things but here are several added value features:
 
-        ' If you want to get *super* fancy...
-        ' how might you code this so it would work for boards of an arbitrary and bigger (e.g. 4x4) size?
+        ' 1) If you want to get a little bit fancy...
+        ' Make the winning line show up in a different colour!
+
+        ' 2) If you want to get even fancier...
+        ' Make this generate a message when the game is a draw/tie game! (cat game?)
+
+        ' 3) If you want to get *super* fancy...
+        ' How might you code this so it would work for boards of an arbitrary and bigger (e.g. 4x4) size?
+
+        ' 4) If you like efficiency...
+        ' How could you do everything in this Sub Procedure (other than colors) with a single loop?
+
+        ' 5) Another fanciness option for people who love clean code...
+        ' This file currently doesn't have Option Strict On, and turning it on will cause some issues.
+        ' Can you determine how to turn Option Strict On and still have it work?
+
+        ' 6) Holy crap you must want to make your life difficult for yourself if you pick this option:
+        ' Can you make it so that you can use arrow keys to move between the different squares in a natural way?
 
         ' *********************************************
         ' This is the part where you stop coding stuff!
@@ -234,30 +198,6 @@ Public Class frmTicTacToe
 
             ' Disable all squares to prevent further play
             SetControlsEnabled(squares, False)
-        End If
-
-    End Sub
-
-    Sub EvaluateTie()
-
-        Dim isSpace As Boolean = False
-
-        If isWinner = False Then
-
-            For Each buttonToCheck As Button In squares
-
-                If buttonToCheck.Text = String.Empty Then
-                    isSpace = True
-                End If
-
-            Next
-
-            If Not isSpace Then
-
-                lblGameStatus.Text = "TIE GAME!"
-
-            End If
-
         End If
 
     End Sub
