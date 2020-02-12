@@ -14,6 +14,8 @@ Public Class frmTicTacToe
     Dim isTurnX As Boolean = True
     ' This boolean value represents the win condition
     Dim isWinner As Boolean = False
+    ' This boolean value represents the tie condition
+    Dim isTie As Boolean = True
     ' Here's an array of buttons, representing squares on the board
     Dim squares As Button(,)
 
@@ -51,6 +53,25 @@ Public Class frmTicTacToe
         If Not isWinner Then
             ' Swap turns
             ChangeTurn()
+
+            ' Evaluate tie
+
+            isTie = True
+            For rowCount As Integer = 0 To squares.GetUpperBound(0)
+                For columnCount As Integer = 0 To squares.GetUpperBound(1)
+
+                    If squares(rowCount, columnCount).Text = String.Empty Then
+                        isTie = False
+                    End If
+
+                Next
+            Next
+
+            If isTie Then
+                lblGameStatus.Text = "TIE GAME, SUCKAZ!"
+            End If
+
+
         End If
 
         ' Put focus on the Reset button
@@ -99,6 +120,20 @@ Public Class frmTicTacToe
     End Sub
 
     ''' <summary>
+    ''' This colors all controls in the array that is passed in
+    ''' </summary>
+    ''' <param name="controlArray">An array of controls to enable or disable</param>
+    ''' <param name="color">the color to use</param>
+    Sub SetControlsColor(controlArray As Control(,), color As Color)
+
+        ' For every textbox in the list that is passed in, set its Enabled property
+        For Each controlToSet As Button In controlArray
+            controlToSet.BackColor = color
+        Next
+
+    End Sub
+
+    ''' <summary>
     ''' Clears things and re-enables controls
     ''' </summary>
     Sub SetDefaults()
@@ -107,6 +142,8 @@ Public Class frmTicTacToe
         ClearControls(squares)
         ' Re-enable any controls that may be disabled
         SetControlsEnabled(squares, True)
+        ' Set the default colors
+        SetControlsColor(squares, Color.LightGray)
         ' Ensure there's no winner
         isWinner = False
         ' ChangeTurn resets the status label and gives the loser the first turn
@@ -143,12 +180,34 @@ Public Class frmTicTacToe
         ' have the same value - doesn't even matter what the value is
         ' as long as it's the same!
         For rowCount As Integer = 0 To squares.GetUpperBound(0)
-            ' What does "GetUpperBound(0)" mean above?
+            If squares(rowCount, 0).Text <> String.Empty And
+            squares(rowCount, 0).Text = squares(rowCount, 1).Text And
+            squares(rowCount, 0).Text = squares(rowCount, 2).Text Then
+                isWinner = True
 
-            ' Something to do with squares(rowCount,0), squares(rowCount,1), etc.
+                squares(rowCount, 0).BackColor = Color.Goldenrod
+                squares(rowCount, 1).BackColor = Color.Goldenrod
+                squares(rowCount, 2).BackColor = Color.Goldenrod
+
+            End If
         Next
 
         ' Next, check all columns.
+        ' Use a For loop to check if all boxes in the same dimension
+        ' have the same value - doesn't even matter what the value is
+        ' as long as it's the same!
+        For columnCount As Integer = 0 To squares.GetUpperBound(0)
+            If squares(0, columnCount).Text <> String.Empty And
+            squares(0, columnCount).Text = squares(1, columnCount).Text And
+            squares(0, columnCount).Text = squares(2, columnCount).Text Then
+                isWinner = True
+
+                squares(0, columnCount).BackColor = Color.Goldenrod
+                squares(1, columnCount).BackColor = Color.Goldenrod
+                squares(2, columnCount).BackColor = Color.Goldenrod
+
+            End If
+        Next
 
         ' Finally, we have to check the two diagonals.
         ' It is not going to save us any work to use loops
@@ -157,10 +216,20 @@ Public Class frmTicTacToe
             squares(0, 0).Text = squares(1, 1).Text And
             squares(0, 0).Text = squares(2, 2).Text Then
             isWinner = True
+
+            squares(0, 0).BackColor = Color.Goldenrod
+            squares(1, 1).BackColor = Color.Goldenrod
+            squares(2, 2).BackColor = Color.Goldenrod
+
         ElseIf squares(0, 2).Text <> String.Empty And
             squares(0, 2).Text = squares(1, 1).Text And
             squares(0, 2).Text = squares(2, 0).Text Then
             isWinner = True
+
+            squares(0, 2).BackColor = Color.Goldenrod
+            squares(1, 1).BackColor = Color.Goldenrod
+            squares(2, 0).BackColor = Color.Goldenrod
+
         End If
 
         ' *************************************************
